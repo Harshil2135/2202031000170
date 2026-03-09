@@ -1,0 +1,3018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RoyalStay Hotel Management</title>
+  <style>
+    :root{
+      --bg:#f4f7fb;
+      --panel:#ffffff;
+      --panel-2:#f9fbff;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --brand:#1e3a8a;
+      --brand-2:#2563eb;
+      --accent:#f59e0b;
+      --success:#16a34a;
+      --danger:#dc2626;
+      --warning:#d97706;
+      --shadow:0 18px 40px rgba(15,23,42,.10);
+      --radius:18px;
+      --sidebar:270px;
+      --topbar:72px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(37,99,235,.10), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(245,158,11,.10), transparent 26%),
+        var(--bg);
+    }
+
+    button,input,select,textarea{
+      font:inherit;
+    }
+
+    a{
+      color:inherit;
+      text-decoration:none;
+    }
+
+    .hidden{display:none!important}
+
+    /* AUTH */
+    .auth-screen{
+      min-height:100vh;
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:0;
+    }
+
+    .auth-brand{
+      background:
+        linear-gradient(135deg, rgba(30,58,138,.95), rgba(37,99,235,.92)),
+        linear-gradient(180deg, #1e293b, #0f172a);
+      color:#fff;
+      padding:48px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .auth-brand::before,
+    .auth-brand::after{
+      content:"";
+      position:absolute;
+      border-radius:50%;
+      background:rgba(255,255,255,.08);
+      pointer-events:none;
+    }
+
+    .auth-brand::before{
+      width:280px;
+      height:280px;
+      top:-90px;
+      right:-70px;
+    }
+
+    .auth-brand::after{
+      width:220px;
+      height:220px;
+      bottom:-80px;
+      left:-50px;
+    }
+
+    .brand-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      width:max-content;
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.12);
+      backdrop-filter:blur(8px);
+      font-weight:700;
+      letter-spacing:.2px;
+      margin-bottom:22px;
+    }
+
+    .brand-title{
+      font-size:clamp(34px,5vw,56px);
+      line-height:1.02;
+      margin:0 0 14px;
+      max-width:520px;
+    }
+
+    .brand-sub{
+      color:rgba(255,255,255,.86);
+      max-width:560px;
+      font-size:17px;
+      line-height:1.6;
+      margin-bottom:28px;
+    }
+
+    .brand-points{
+      display:grid;
+      gap:14px;
+      max-width:560px;
+    }
+
+    .point{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      background:rgba(255,255,255,.09);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:16px;
+      padding:14px 16px;
+      backdrop-filter:blur(6px);
+    }
+
+    .point span{
+      font-size:22px;
+      line-height:1;
+    }
+
+    .demo-box{
+      margin-top:26px;
+      background:rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.15);
+      border-radius:18px;
+      padding:16px;
+      max-width:460px;
+    }
+
+    .demo-box h4{
+      margin:0 0 8px;
+      font-size:15px;
+    }
+
+    .demo-line{
+      color:rgba(255,255,255,.9);
+      font-size:14px;
+      margin:5px 0;
+    }
+
+    .auth-panel-wrap{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:32px;
+    }
+
+    .auth-card{
+      width:min(100%, 470px);
+      background:rgba(255,255,255,.92);
+      border:1px solid rgba(255,255,255,.7);
+      backdrop-filter:blur(10px);
+      box-shadow:var(--shadow);
+      border-radius:28px;
+      padding:24px;
+    }
+
+    .auth-tabs{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      background:#eef4ff;
+      border-radius:16px;
+      padding:6px;
+      margin-bottom:20px;
+    }
+
+    .tab-btn{
+      border:none;
+      background:transparent;
+      color:var(--muted);
+      border-radius:12px;
+      padding:12px 14px;
+      font-weight:700;
+      cursor:pointer;
+      transition:.25s ease;
+    }
+
+    .tab-btn.active{
+      background:#fff;
+      color:var(--brand);
+      box-shadow:0 8px 20px rgba(37,99,235,.12);
+    }
+
+    .auth-head h2{
+      margin:4px 0 8px;
+      font-size:28px;
+    }
+
+    .auth-head p{
+      margin:0 0 20px;
+      color:var(--muted);
+      line-height:1.6;
+    }
+
+    .auth-form{
+      display:none;
+    }
+
+    .auth-form.active{
+      display:block;
+    }
+
+    .field{
+      margin-bottom:14px;
+    }
+
+    .field label{
+      display:block;
+      font-size:14px;
+      font-weight:700;
+      margin-bottom:8px;
+    }
+
+    .field input,
+    .field select,
+    .field textarea{
+      width:100%;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:14px;
+      padding:13px 14px;
+      color:var(--text);
+      outline:none;
+      transition:.2s ease;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus{
+      border-color:#9ec1ff;
+      box-shadow:0 0 0 4px rgba(37,99,235,.10);
+    }
+
+    .two-col{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .helper{
+      font-size:12px;
+      color:var(--muted);
+      margin-top:6px;
+    }
+
+    .auth-actions{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      margin-top:6px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      border:none;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:800;
+      cursor:pointer;
+      transition:.2s ease;
+    }
+
+    .btn:hover{transform:translateY(-1px)}
+    .btn:active{transform:translateY(0)}
+
+    .btn-primary{
+      background:linear-gradient(135deg, var(--brand), var(--brand-2));
+      color:#fff;
+      box-shadow:0 12px 24px rgba(37,99,235,.18);
+    }
+
+    .btn-light{
+      background:#eef4ff;
+      color:var(--brand);
+    }
+
+    .btn-ghost{
+      background:#fff;
+      color:var(--text);
+      border:1px solid var(--line);
+    }
+
+    .btn-danger{
+      background:var(--danger);
+      color:#fff;
+    }
+
+    .btn-success{
+      background:var(--success);
+      color:#fff;
+    }
+
+    .btn-warning{
+      background:var(--accent);
+      color:#1f2937;
+    }
+
+    .btn-sm{
+      padding:10px 12px;
+      border-radius:12px;
+      font-size:13px;
+      font-weight:700;
+    }
+
+    /* APP */
+    .app-shell{
+      display:none;
+      min-height:100vh;
+    }
+
+    .app-shell.active{
+      display:block;
+    }
+
+    .sidebar{
+      position:fixed;
+      inset:0 auto 0 0;
+      width:var(--sidebar);
+      background:#0f172a;
+      color:#dbeafe;
+      border-right:1px solid rgba(255,255,255,.06);
+      padding:18px 16px;
+      overflow:auto;
+      z-index:30;
+    }
+
+    .sidebar-brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:10px 10px 18px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      margin-bottom:14px;
+    }
+
+    .brand-icon{
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg, var(--accent), #fbbf24);
+      color:#111827;
+      font-size:22px;
+      font-weight:900;
+    }
+
+    .brand-copy h3{
+      margin:0;
+      color:#fff;
+      font-size:18px;
+    }
+
+    .brand-copy p{
+      margin:3px 0 0;
+      color:#94a3b8;
+      font-size:12px;
+    }
+
+    .nav-group{
+      margin-top:14px;
+    }
+
+    .nav-label{
+      color:#64748b;
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      font-weight:800;
+      padding:10px 12px 8px;
+    }
+
+    .nav-btn{
+      width:100%;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      border:none;
+      background:transparent;
+      color:#dbeafe;
+      border-radius:14px;
+      padding:12px;
+      cursor:pointer;
+      text-align:left;
+      transition:.2s ease;
+      margin-bottom:6px;
+    }
+
+    .nav-btn .tag{
+      margin-left:auto;
+      background:rgba(245,158,11,.18);
+      color:#fcd34d;
+      border:1px solid rgba(245,158,11,.25);
+      font-size:11px;
+      padding:3px 8px;
+      border-radius:999px;
+      font-weight:800;
+    }
+
+    .nav-btn:hover{
+      background:rgba(255,255,255,.06);
+    }
+
+    .nav-btn.active{
+      background:linear-gradient(135deg, rgba(37,99,235,.22), rgba(245,158,11,.18));
+      color:#fff;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.06);
+    }
+
+    .main{
+      margin-left:var(--sidebar);
+      min-height:100vh;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:20;
+      height:var(--topbar);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      background:rgba(255,255,255,.88);
+      backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--line);
+      padding:0 18px;
+    }
+
+    .top-left{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+    }
+
+    .menu-btn{
+      display:none;
+      border:none;
+      background:#eef4ff;
+      color:var(--brand);
+      width:42px;
+      height:42px;
+      border-radius:12px;
+      cursor:pointer;
+      font-size:19px;
+    }
+
+    .page-title{
+      margin:0;
+      font-size:24px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .top-right{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:8px 12px;
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    .user-pill{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:7px 12px 7px 8px;
+    }
+
+    .avatar{
+      width:34px;
+      height:34px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg, var(--brand), var(--brand-2));
+      color:#fff;
+      font-weight:900;
+      font-size:13px;
+      flex:none;
+    }
+
+    .content{
+      padding:20px;
+    }
+
+    .page-section{
+      display:none;
+    }
+
+    .page-section.active{
+      display:block;
+    }
+
+    .hero{
+      background:
+        linear-gradient(135deg, rgba(30,58,138,.94), rgba(37,99,235,.86));
+      color:#fff;
+      border-radius:26px;
+      padding:24px;
+      box-shadow:var(--shadow);
+      margin-bottom:18px;
+    }
+
+    .hero h2{
+      margin:0 0 8px;
+      font-size:30px;
+    }
+
+    .hero p{
+      margin:0;
+      color:rgba(255,255,255,.88);
+      max-width:720px;
+      line-height:1.6;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:16px;
+      margin:18px 0;
+    }
+
+    .card{
+      background:var(--panel);
+      border:1px solid rgba(15,23,42,.05);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+
+    .card-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      flex-wrap:wrap;
+    }
+
+    .card-head h3{
+      margin:0;
+      font-size:18px;
+    }
+
+    .card-body{
+      padding:18px;
+    }
+
+    .stat-card{
+      padding:18px;
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+    }
+
+    .stat-icon{
+      width:52px;
+      height:52px;
+      border-radius:16px;
+      display:grid;
+      place-items:center;
+      font-size:24px;
+      background:#eff6ff;
+    }
+
+    .stat-copy small{
+      color:var(--muted);
+      display:block;
+      margin-bottom:6px;
+      font-weight:700;
+    }
+
+    .stat-copy strong{
+      font-size:28px;
+      display:block;
+      margin-bottom:4px;
+    }
+
+    .stat-copy span{
+      font-size:13px;
+      color:var(--success);
+      font-weight:700;
+    }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns:1.25fr .95fr;
+      gap:16px;
+      margin-bottom:16px;
+    }
+
+    .grid-3{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:16px;
+      margin-bottom:16px;
+    }
+
+    .grid-4{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:16px;
+      margin-bottom:16px;
+    }
+
+    .bars{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:12px;
+      height:220px;
+      padding-top:18px;
+    }
+
+    .bar-wrap{
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:10px;
+    }
+
+    .bar{
+      width:100%;
+      max-width:42px;
+      border-radius:14px 14px 6px 6px;
+      background:linear-gradient(180deg, #60a5fa, #1d4ed8);
+      box-shadow:inset 0 -8px 14px rgba(255,255,255,.12);
+    }
+
+    .bar-label{
+      font-size:12px;
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    .quick-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .table-wrap{
+      overflow:auto;
+      width:100%;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:720px;
+    }
+
+    th,td{
+      padding:14px 12px;
+      border-bottom:1px solid var(--line);
+      text-align:left;
+      vertical-align:top;
+    }
+
+    th{
+      background:#f8fbff;
+      color:#334155;
+      font-size:13px;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+    }
+
+    tr:hover td{
+      background:#fcfdff;
+    }
+
+    .status{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      border-radius:999px;
+      padding:7px 10px;
+      font-size:12px;
+      font-weight:800;
+      white-space:nowrap;
+    }
+
+    .ok{background:#ecfdf3;color:#166534}
+    .busy{background:#fef2f2;color:#991b1b}
+    .wait{background:#fffbeb;color:#92400e}
+    .info{background:#eff6ff;color:#1d4ed8}
+    .dark{background:#f3f4f6;color:#374151}
+
+    .room-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:14px;
+    }
+
+    .room-card{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, #fff, #fbfdff);
+      border-radius:18px;
+      padding:16px;
+      box-shadow:0 10px 24px rgba(15,23,42,.06);
+    }
+
+    .room-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:8px;
+      margin-bottom:10px;
+    }
+
+    .room-no{
+      font-size:24px;
+      font-weight:900;
+      margin-bottom:4px;
+    }
+
+    .room-type{
+      color:var(--muted);
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .room-price{
+      font-size:20px;
+      font-weight:900;
+      color:var(--brand);
+      margin:10px 0 12px;
+    }
+
+    .mini-list{
+      display:grid;
+      gap:8px;
+      color:#475569;
+      font-size:13px;
+    }
+
+    .guest-grid{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:14px;
+    }
+
+    .guest-card{
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+      padding:16px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:linear-gradient(180deg, #fff, #fbfdff);
+    }
+
+    .guest-avatar{
+      width:54px;
+      height:54px;
+      border-radius:16px;
+      background:linear-gradient(135deg, #dbeafe, #bfdbfe);
+      display:grid;
+      place-items:center;
+      font-size:24px;
+      flex:none;
+    }
+
+    .guest-meta h4{
+      margin:0 0 6px;
+      font-size:17px;
+    }
+
+    .guest-meta p{
+      margin:0 0 6px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.5;
+    }
+
+    .tasks{
+      display:grid;
+      gap:12px;
+    }
+
+    .task{
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      background:#fff;
+    }
+
+    .task-badge{
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      background:#eef4ff;
+      font-size:22px;
+      flex:none;
+    }
+
+    .task h4{
+      margin:0 0 6px;
+      font-size:16px;
+    }
+
+    .task p{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.5;
+    }
+
+    .menu-grid{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:14px;
+    }
+
+    .menu-card{
+      overflow:hidden;
+      border:1px solid var(--line);
+      border-radius:20px;
+      background:#fff;
+    }
+
+    .menu-visual{
+      height:120px;
+      display:grid;
+      place-items:center;
+      font-size:42px;
+      background:linear-gradient(135deg, #dbeafe, #fff7ed);
+    }
+
+    .menu-body{
+      padding:16px;
+    }
+
+    .menu-body h4{
+      margin:0 0 6px;
+      font-size:17px;
+    }
+
+    .menu-body p{
+      margin:0 0 12px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.5;
+    }
+
+    .menu-footer{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .menu-price{
+      font-weight:900;
+      color:var(--brand);
+      font-size:20px;
+    }
+
+    .supply-list{
+      display:grid;
+      gap:12px;
+    }
+
+    .supply{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      background:#fff;
+      flex-wrap:wrap;
+    }
+
+    .supply-left{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .supply-icon{
+      width:46px;
+      height:46px;
+      border-radius:14px;
+      background:#fff7ed;
+      display:grid;
+      place-items:center;
+      font-size:22px;
+    }
+
+    .supply h4{
+      margin:0 0 4px;
+      font-size:16px;
+    }
+
+    .supply p{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .supply-right{
+      min-width:160px;
+      text-align:right;
+    }
+
+    .big{
+      font-size:24px;
+      font-weight:900;
+      margin-bottom:4px;
+    }
+
+    .staff-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:14px;
+    }
+
+    .staff-card{
+      border:1px solid var(--line);
+      border-radius:20px;
+      background:#fff;
+      padding:18px;
+      text-align:center;
+    }
+
+    .staff-avatar{
+      width:66px;
+      height:66px;
+      border-radius:18px;
+      margin:0 auto 12px;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg, #dbeafe, #fde68a);
+      font-size:30px;
+    }
+
+    .staff-card h4{
+      margin:0 0 6px;
+      font-size:17px;
+    }
+
+    .staff-card p{
+      margin:0 0 10px;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:14px;
+    }
+
+    .form-grid-3{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:14px;
+    }
+
+    .inline-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .kpi{
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:18px;
+      background:linear-gradient(180deg, #fff, #fbfdff);
+    }
+
+    .kpi small{
+      display:block;
+      color:var(--muted);
+      margin-bottom:8px;
+      font-weight:800;
+    }
+
+    .kpi strong{
+      display:block;
+      font-size:30px;
+      margin-bottom:8px;
+    }
+
+    .progress{
+      height:10px;
+      background:#eef2f7;
+      border-radius:999px;
+      overflow:hidden;
+    }
+
+    .progress span{
+      display:block;
+      height:100%;
+      border-radius:999px;
+      background:linear-gradient(90deg, var(--brand), var(--brand-2));
+    }
+
+    .toggle-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      padding:12px 0;
+      border-bottom:1px solid var(--line);
+    }
+
+    .toggle-row:last-child{border-bottom:none}
+
+    .toggle-copy h4{
+      margin:0 0 4px;
+      font-size:15px;
+    }
+
+    .toggle-copy p{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .switch{
+      position:relative;
+      width:54px;
+      height:30px;
+      flex:none;
+    }
+
+    .switch input{
+      opacity:0;
+      width:0;
+      height:0;
+    }
+
+    .slider{
+      position:absolute;
+      inset:0;
+      background:#cbd5e1;
+      border-radius:999px;
+      cursor:pointer;
+      transition:.2s ease;
+    }
+
+    .slider::before{
+      content:"";
+      position:absolute;
+      width:22px;
+      height:22px;
+      left:4px;
+      top:4px;
+      border-radius:50%;
+      background:#fff;
+      transition:.2s ease;
+      box-shadow:0 2px 6px rgba(0,0,0,.15);
+    }
+
+    .switch input:checked + .slider{
+      background:linear-gradient(135deg, var(--brand), var(--brand-2));
+    }
+
+    .switch input:checked + .slider::before{
+      transform:translateX(24px);
+    }
+
+    .page-note{
+      color:var(--muted);
+      margin:0 0 14px;
+      line-height:1.6;
+    }
+
+    .toast{
+      position:fixed;
+      right:16px;
+      bottom:16px;
+      max-width:360px;
+      padding:14px 16px;
+      border-radius:16px;
+      color:#fff;
+      font-weight:700;
+      box-shadow:0 20px 45px rgba(15,23,42,.18);
+      transform:translateY(20px);
+      opacity:0;
+      pointer-events:none;
+      transition:.28s ease;
+      z-index:100;
+    }
+
+    .toast.show{
+      transform:translateY(0);
+      opacity:1;
+    }
+
+    .toast.success{background:linear-gradient(135deg, #16a34a, #22c55e)}
+    .toast.error{background:linear-gradient(135deg, #b91c1c, #ef4444)}
+    .toast.info{background:linear-gradient(135deg, #1d4ed8, #3b82f6)}
+
+    .overlay{
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(15,23,42,.5);
+      z-index:25;
+    }
+
+    .overlay.show{display:block}
+
+    @media (max-width: 1200px){
+      .stats{grid-template-columns:repeat(2, minmax(0,1fr))}
+      .room-grid,
+      .staff-grid{grid-template-columns:repeat(2, minmax(0,1fr))}
+      .guest-grid,
+      .menu-grid{grid-template-columns:repeat(2, minmax(0,1fr))}
+      .grid-4{grid-template-columns:repeat(2, minmax(0,1fr))}
+    }
+
+    @media (max-width: 980px){
+      .auth-screen{grid-template-columns:1fr}
+      .auth-brand{padding:34px}
+      .sidebar{
+        transform:translateX(-100%);
+        transition:.25s ease;
+      }
+      .sidebar.show{
+        transform:translateX(0);
+      }
+      .main{
+        margin-left:0;
+      }
+      .menu-btn{display:inline-grid;place-items:center}
+      .grid-2,
+      .grid-3,
+      .form-grid,
+      .form-grid-3{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width: 720px){
+      .auth-panel-wrap{padding:18px}
+      .auth-card{padding:18px}
+      .two-col,
+      .stats,
+      .room-grid,
+      .guest-grid,
+      .menu-grid,
+      .staff-grid,
+      .grid-4{
+        grid-template-columns:1fr;
+      }
+      .content{padding:14px}
+      .topbar{padding:0 12px}
+      .hero{padding:18px}
+      .hero h2{font-size:24px}
+      .page-title{font-size:20px}
+      .top-right{gap:8px}
+      .chip{display:none}
+      .user-pill{max-width:170px}
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-screen" id="authScreen">
+    <section class="auth-brand">
+      <div class="brand-badge">🏨 RoyalStay Hotel Management</div>
+      <h1 class="brand-title">Run your hotel with calm, clarity, and fewer sticky notes.</h1>
+      <p class="brand-sub">
+        A single master dashboard for rooms, reservations, guests, housekeeping,
+        restaurant, billing, staff, and reports. Tiny empire, neatly organized.
+      </p>
+
+      <div class="brand-points">
+        <div class="point">
+          <span>🛏️</span>
+          <div>
+            <strong>Room & reservation control</strong>
+            <div>Track availability, occupancy, check-in, check-out, and daily bookings from one place.</div>
+          </div>
+        </div>
+        <div class="point">
+          <span>🧹</span>
+          <div>
+            <strong>Operations at a glance</strong>
+            <div>Coordinate housekeeping, maintenance, inventory, and front desk workflows quickly.</div>
+          </div>
+        </div>
+        <div class="point">
+          <span>📈</span>
+          <div>
+            <strong>Simple reporting</strong>
+            <div>View revenue, occupancy, guest activity, and team schedules without wrestling spreadsheets.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-box">
+        <h4>Demo Login</h4>
+        <div class="demo-line"><strong>Name:</strong> Mammoth Newt</div>
+        <div class="demo-line"><strong>Password:</strong> 0226</div>
+        <div class="demo-line"><strong>Email:</strong> mammoth@royalstay.demo</div>
+        <div class="demo-line">Tip: sign up also works for this session only.</div>
+      </div>
+    </section>
+
+    <section class="auth-panel-wrap">
+      <div class="auth-card">
+        <div class="auth-tabs">
+          <button class="tab-btn active" id="loginTabBtn" type="button">Login</button>
+          <button class="tab-btn" id="signupTabBtn" type="button">Sign Up</button>
+        </div>
+
+        <div class="auth-head">
+          <h2 id="authTitle">Welcome back</h2>
+          <p id="authSub">Login to open your hotel dashboard and manage daily operations.</p>
+        </div>
+
+        <form class="auth-form active" id="loginForm">
+          <div class="field">
+            <label for="loginIdentifier">Full name or email</label>
+            <input id="loginIdentifier" type="text" placeholder="Enter your name or email" />
+          </div>
+          <div class="field">
+            <label for="loginPassword">Password</label>
+            <input id="loginPassword" type="password" placeholder="Enter your password" />
+          </div>
+          <div class="auth-actions">
+            <button class="btn btn-primary" type="submit">Login</button>
+            <button class="btn btn-light" type="button" id="fillDemoBtn">Use Demo Login</button>
+          </div>
+          <div class="helper">No database is used here, so sign-up accounts stay only for this session.</div>
+        </form>
+
+        <form class="auth-form" id="signupForm">
+          <div class="two-col">
+            <div class="field">
+              <label for="signupName">Full name</label>
+              <input id="signupName" type="text" placeholder="Enter full name" />
+            </div>
+            <div class="field">
+              <label for="signupRole">Role</label>
+              <select id="signupRole">
+                <option>Administrator</option>
+                <option>Manager</option>
+                <option>Front Desk</option>
+                <option>Housekeeping</option>
+                <option>Accountant</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="signupEmail">Email</label>
+            <input id="signupEmail" type="email" placeholder="Enter email address" />
+          </div>
+          <div class="two-col">
+            <div class="field">
+              <label for="signupPassword">Password</label>
+              <input id="signupPassword" type="password" placeholder="Create password" />
+            </div>
+            <div class="field">
+              <label for="signupConfirm">Confirm password</label>
+              <input id="signupConfirm" type="password" placeholder="Confirm password" />
+            </div>
+          </div>
+          <div class="auth-actions">
+            <button class="btn btn-primary" type="submit">Create Account</button>
+            <button class="btn btn-ghost" type="button" id="goLoginBtn">Back to Login</button>
+          </div>
+          <div class="helper">After sign-up, you will be signed in automatically. Fancy.</div>
+        </form>
+      </div>
+    </section>
+  </div>
+
+  <div class="app-shell" id="appShell">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">🏨</div>
+        <div class="brand-copy">
+          <h3>RoyalStay</h3>
+          <p>Hotel Management Suite</p>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-label">Overview</div>
+        <button class="nav-btn active" data-page="dashboard" data-title="Dashboard"><span>📊</span>Dashboard</button>
+        <button class="nav-btn" data-page="rooms" data-title="Rooms"><span>🛏️</span>Rooms</button>
+        <button class="nav-btn" data-page="reservations" data-title="Reservations"><span>📅</span>Reservations <span class="tag">12</span></button>
+        <button class="nav-btn" data-page="guests" data-title="Guests"><span>👥</span>Guests</button>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-label">Front Office</div>
+        <button class="nav-btn" data-page="checkin" data-title="Check In / Check Out"><span>🧾</span>Check In / Out</button>
+        <button class="nav-btn" data-page="housekeeping" data-title="Housekeeping"><span>🧹</span>Housekeeping <span class="tag">8</span></button>
+        <button class="nav-btn" data-page="restaurant" data-title="Restaurant"><span>🍽️</span>Restaurant</button>
+        <button class="nav-btn" data-page="inventory" data-title="Inventory"><span>📦</span>Inventory</button>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-label">Management</div>
+        <button class="nav-btn" data-page="billing" data-title="Billing"><span>💳</span>Billing</button>
+        <button class="nav-btn" data-page="staff" data-title="Staff"><span>🧑‍💼</span>Staff</button>
+        <button class="nav-btn" data-page="reports" data-title="Reports"><span>📈</span>Reports</button>
+        <button class="nav-btn" data-page="settings" data-title="Settings"><span>⚙️</span>Settings</button>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-label">Session</div>
+        <button class="nav-btn" id="logoutBtn"><span>🚪</span>Logout</button>
+      </div>
+    </aside>
+
+    <div class="overlay" id="overlay"></div>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="top-left">
+          <button class="menu-btn" id="menuBtn" type="button">☰</button>
+          <h1 class="page-title" id="pageTitle">Dashboard</h1>
+        </div>
+
+        <div class="top-right">
+          <div class="chip">🔔 5 alerts</div>
+          <div class="chip">📨 3 messages</div>
+          <div class="user-pill">
+            <div class="avatar" id="userAvatar">MN</div>
+            <div>
+              <div style="font-weight:800;font-size:13px" id="topUserName">Mammoth Newt</div>
+              <div style="color:var(--muted);font-size:12px" id="topUserRole">Administrator</div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="content">
+        <section class="page-section active" id="dashboard">
+          <div class="hero">
+            <h2>Hello, <span id="heroUserName">Mammoth Newt</span> 👋</h2>
+            <p>
+              Here is your live hotel snapshot: rooms are filling nicely, the front desk is moving,
+              and the coffee machine is probably carrying the team heroically.
+            </p>
+          </div>
+
+          <div class="stats">
+            <div class="card stat-card">
+              <div class="stat-icon">🛏️</div>
+              <div class="stat-copy">
+                <small>Total Rooms</small>
+                <strong>120</strong>
+                <span>+4 active this week</span>
+              </div>
+            </div>
+            <div class="card stat-card">
+              <div class="stat-icon">✅</div>
+              <div class="stat-copy">
+                <small>Occupied Today</small>
+                <strong>86</strong>
+                <span>72% occupancy</span>
+              </div>
+            </div>
+            <div class="card stat-card">
+              <div class="stat-icon">💵</div>
+              <div class="stat-copy">
+                <small>Revenue Today</small>
+                <strong>&#36;12,480</strong>
+                <span>+8.4% from yesterday</span>
+              </div>
+            </div>
+            <div class="card stat-card">
+              <div class="stat-icon">🧹</div>
+              <div class="stat-copy">
+                <small>Pending Tasks</small>
+                <strong>18</strong>
+                <span>8 housekeeping priority</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-head">
+                <h3>Recent Bookings</h3>
+                <div class="quick-actions">
+                  <button class="btn btn-sm btn-primary" data-toast="New booking form opened (demo)">New Booking</button>
+                  <button class="btn btn-sm btn-light" data-toast="Daily booking list exported (demo)">Export</button>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Guest</th>
+                        <th>Room</th>
+                        <th>Check In</th>
+                        <th>Nights</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>John Smith</td>
+                        <td>204</td>
+                        <td>09 Mar 2026</td>
+                        <td>3</td>
+                        <td><span class="status ok">Confirmed</span></td>
+                      </tr>
+                      <tr>
+                        <td>Emma Clark</td>
+                        <td>318</td>
+                        <td>09 Mar 2026</td>
+                        <td>2</td>
+                        <td><span class="status info">Checked In</span></td>
+                      </tr>
+                      <tr>
+                        <td>David Kim</td>
+                        <td>410</td>
+                        <td>10 Mar 2026</td>
+                        <td>4</td>
+                        <td><span class="status wait">Pending</span></td>
+                      </tr>
+                      <tr>
+                        <td>Amelia Reed</td>
+                        <td>118</td>
+                        <td>10 Mar 2026</td>
+                        <td>1</td>
+                        <td><span class="status ok">Confirmed</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head">
+                <h3>Weekly Revenue</h3>
+              </div>
+              <div class="card-body">
+                <div class="bars">
+                  <div class="bar-wrap">
+                    <div class="bar" style="height:48%"></div>
+                    <div class="bar-label">Mon</div>
+                  </div>
+                  <div class="bar-wrap">
+                    <div class="bar" style="height:62%"></div>
+                    <div class="bar-label">Tue</div>
+                  </div>
+                  <div class="bar-wrap">
+                    <div class="bar" style="height:57%"></div>
+                    <div class="bar-label">Wed</div>
+                  </div>
+                  <div class="bar-wrap">
+                    <div class="bar" style="height:74%"></div>
+                    <div class="bar-label">Thu</div>
+                  </div>
+                  <div class="bar-wrap">
+                    <div class="bar" style="height:88%"></div>
+                    <div class="bar-label">Fri</div>
+                  </div>
+                  <div class="bar-wrap">
+                    <div class="bar" style="height:81%"></div>
+                    <div class="bar-label">Sat</div>
+                  </div>
+                  <div class="bar-wrap">
+                    <div class="bar" style="height:69%"></div>
+                    <div class="bar-label">Sun</div>
+                  </div>
+                </div>
+                <p class="page-note" style="margin-top:16px">Best performing day so far: Friday with event bookings and banquet orders.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-3">
+            <div class="card">
+              <div class="card-head">
+                <h3>Quick Actions</h3>
+              </div>
+              <div class="card-body">
+                <div class="quick-actions">
+                  <button class="btn btn-primary" data-toast="Check-in started (demo)">Check In Guest</button>
+                  <button class="btn btn-light" data-toast="Check-out started (demo)">Check Out</button>
+                  <button class="btn btn-warning" data-toast="Maintenance ticket created (demo)">Report Issue</button>
+                  <button class="btn btn-ghost" data-toast="Invoice generated (demo)">Create Invoice</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head">
+                <h3>Occupancy Summary</h3>
+              </div>
+              <div class="card-body">
+                <div class="mini-list">
+                  <div>🟢 Available Rooms: <strong>28</strong></div>
+                  <div>🔴 Occupied Rooms: <strong>86</strong></div>
+                  <div>🟡 Cleaning: <strong>4</strong></div>
+                  <div>⚪ Maintenance: <strong>2</strong></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head">
+                <h3>Alerts</h3>
+              </div>
+              <div class="card-body">
+                <div class="mini-list">
+                  <div>⚠️ Room 502 AC maintenance pending</div>
+                  <div>⚠️ Shampoo stock below reorder level</div>
+                  <div>✅ VIP arrival at 2:00 PM prepared</div>
+                  <div>🧾 3 invoices waiting for payment</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="page-section" id="rooms">
+          <div class="card">
+            <div class="card-head">
+              <h3>Room Overview</h3>
+              <div class="quick-actions">
+                <button class="btn btn-sm btn-primary" data-toast="Add room action opened (demo)">Add Room</button>
+                <button class="btn btn-sm btn-light" data-toast="Room list refreshed">Refresh</button>
+              </div>
+            </div>
+            <div class="card-body">
+              <p class="page-note">A quick look at room categories, pricing, amenities, and current status.</p>
+              <div class="room-grid">
+                <div class="room-card">
+                  <div class="room-top">
+                    <div>
+                      <div class="room-no">101</div>
+                      <div class="room-type">Standard Queen</div>
+                    </div>
+                    <span class="status ok">Available</span>
+                  </div>
+                  <div class="room-price">&#36;90 / night</div>
+                  <div class="mini-list">
+                    <div>📶 Wi-Fi included</div>
+                    <div>❄️ Air conditioning</div>
+                    <div>🧼 Clean and ready</div>
+                  </div>
+                </div>
+
+                <div class="room-card">
+                  <div class="room-top">
+                    <div>
+                      <div class="room-no">204</div>
+                      <div class="room-type">Deluxe King</div>
+                    </div>
+                    <span class="status busy">Occupied</span>
+                  </div>
+                  <div class="room-price">&#36;145 / night</div>
+                  <div class="mini-list">
+                    <div>🌆 Balcony view</div>
+                    <div>☕ Coffee setup</div>
+                    <div>🧳 Guest until 12 Mar</div>
+                  </div>
+                </div>
+
+                <div class="room-card">
+                  <div class="room-top">
+                    <div>
+                      <div class="room-no">318</div>
+                      <div class="room-type">Executive Suite</div>
+                    </div>
+                    <span class="status info">Checked In</span>
+                  </div>
+                  <div class="room-price">&#36;210 / night</div>
+                  <div class="mini-list">
+                    <div>🛋️ Living area</div>
+                    <div>🍽️ Dining table</div>
+                    <div>🧾 Corporate booking</div>
+                  </div>
+                </div>
+
+                <div class="room-card">
+                  <div class="room-top">
+                    <div>
+                      <div class="room-no">502</div>
+                      <div class="room-type">Premium Suite</div>
+                    </div>
+                    <span class="status dark">Maintenance</span>
+                  </div>
+                  <div class="room-price">&#36;280 / night</div>
+                  <div class="mini-list">
+                    <div>🛠️ AC service pending</div>
+                    <div>🧰 Engineering assigned</div>
+                    <div>⏱️ ETA 4 PM</div>
+                  </div>
+                </div>
+
+                <div class="room-card">
+                  <div class="room-top">
+                    <div>
+                      <div class="room-no">118</div>
+                      <div class="room-type">Twin Room</div>
+                    </div>
+                    <span class="status wait">Reserved</span>
+                  </div>
+                  <div class="room-price">&#36;110 / night</div>
+                  <div class="mini-list">
+                    <div>👫 Two beds</div>
+                    <div>🧴 Amenities ready</div>
+                    <div>🚕 Arrival 6 PM</div>
+                  </div>
+                </div>
+
+                <div class="room-card">
+                  <div class="room-top">
+                    <div>
+                      <div class="room-no">420</div>
+                      <div class="room-type">Family Suite</div>
+                    </div>
+                    <span class="status busy">Occupied</span>
+                  </div>
+                  <div class="room-price">&#36;240 / night</div>
+                  <div class="mini-list">
+                    <div>👨‍👩‍👧‍👦 4 guests</div>
+                    <div>🍿 Extra bed</div>
+                    <div>🛎️ Late checkout requested</div>
+                  </div>
+                </div>
+
+                <div class="room-card">
+                  <div class="room-top">
+                    <div>
+                      <div class="room-no">305</div>
+                      <div class="room-type">Studio King</div>
+                    </div>
+                    <span class="status ok">Available</span>
+                  </div>
+                  <div class="room-price">&#36;130 / night</div>
+                  <div class="mini-list">
+                    <div>💼 Work desk</div>
+                    <div>📺 Smart TV</div>
+                    <div>✨ Ready for sale</div>
+                  </div>
+                </div>
+
+                <div class="room-card">
+                  <div class="room-top">
+                    <div>
+                      <div class="room-no">411</div>
+                      <div class="room-type">Corner Suite</div>
+                    </div>
+                    <span class="status wait">Reserved</span>
+                  </div>
+                  <div class="room-price">&#36;225 / night</div>
+                  <div class="mini-list">
+                    <div>🌇 City view</div>
+                    <div>🎁 VIP amenities</div>
+                    <div>⭐ Arrival priority</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <h3>Room Rate Matrix</h3>
+            </div>
+            <div class="card-body">
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Type</th>
+                      <th>Base Rate</th>
+                      <th>Weekend Rate</th>
+                      <th>Capacity</th>
+                      <th>Breakfast</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Standard Queen</td>
+                      <td>&#36;90</td>
+                      <td>&#36;105</td>
+                      <td>2</td>
+                      <td>Optional</td>
+                      <td><span class="status ok">Selling</span></td>
+                    </tr>
+                    <tr>
+                      <td>Deluxe King</td>
+                      <td>&#36;145</td>
+                      <td>&#36;165</td>
+                      <td>2</td>
+                      <td>Included</td>
+                      <td><span class="status ok">Selling</span></td>
+                    </tr>
+                    <tr>
+                      <td>Executive Suite</td>
+                      <td>&#36;210</td>
+                      <td>&#36;240</td>
+                      <td>3</td>
+                      <td>Included</td>
+                      <td><span class="status info">High demand</span></td>
+                    </tr>
+                    <tr>
+                      <td>Family Suite</td>
+                      <td>&#36;240</td>
+                      <td>&#36;265</td>
+                      <td>4</td>
+                      <td>Included</td>
+                      <td><span class="status wait">Limited</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="page-section" id="reservations">
+          <div class="card">
+            <div class="card-head">
+              <h3>Create Reservation</h3>
+            </div>
+            <div class="card-body">
+              <form class="demo-form" data-success="Reservation created successfully (demo)">
+                <div class="form-grid">
+                  <div class="field">
+                    <label>Guest name</label>
+                    <input type="text" placeholder="Enter guest name" required />
+                  </div>
+                  <div class="field">
+                    <label>Phone number</label>
+                    <input type="text" placeholder="Enter phone number" required />
+                  </div>
+                  <div class="field">
+                    <label>Email</label>
+                    <input type="email" placeholder="Enter email address" />
+                  </div>
+                  <div class="field">
+                    <label>Room type</label>
+                    <select>
+                      <option>Standard Queen</option>
+                      <option>Deluxe King</option>
+                      <option>Executive Suite</option>
+                      <option>Family Suite</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label>Check-in date</label>
+                    <input type="date" required />
+                  </div>
+                  <div class="field">
+                    <label>Check-out date</label>
+                    <input type="date" required />
+                  </div>
+                </div>
+                <div class="inline-actions">
+                  <button class="btn btn-primary" type="submit">Save Reservation</button>
+                  <button class="btn btn-light" type="button" data-toast="Availability checked (demo)">Check Availability</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <h3>Reservation List</h3>
+            </div>
+            <div class="card-body">
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Booking ID</th>
+                      <th>Guest</th>
+                      <th>Room Type</th>
+                      <th>Stay</th>
+                      <th>Total</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>RS-2026-0012</td>
+                      <td>David Kim</td>
+                      <td>Executive Suite</td>
+                      <td>10 Mar – 14 Mar</td>
+                      <td>&#36;840</td>
+                      <td><span class="status wait">Pending</span></td>
+                      <td><button class="btn btn-sm btn-primary" data-toast="Reservation updated (demo)">Confirm</button></td>
+                    </tr>
+                    <tr>
+                      <td>RS-2026-0013</td>
+                      <td>Amelia Reed</td>
+                      <td>Twin Room</td>
+                      <td>10 Mar – 11 Mar</td>
+                      <td>&#36;110</td>
+                      <td><span class="status ok">Confirmed</span></td>
+                      <td><button class="btn btn-sm btn-light" data-toast="Reservation edited (demo)">Edit</button></td>
+                    </tr>
+                    <tr>
+                      <td>RS-2026-0014</td>
+                      <td>Nathan Bell</td>
+                      <td>Deluxe King</td>
+                      <td>11 Mar – 13 Mar</td>
+                      <td>&#36;290</td>
+                      <td><span class="status ok">Confirmed</span></td>
+                      <td><button class="btn btn-sm btn-light" data-toast="Reservation edited (demo)">Edit</button></td>
+                    </tr>
+                    <tr>
+                      <td>RS-2026-0015</td>
+                      <td>Lisa Wong</td>
+                      <td>Family Suite</td>
+                      <td>12 Mar – 15 Mar</td>
+                      <td>&#36;720</td>
+                      <td><span class="status info">Deposit Paid</span></td>
+                      <td><button class="btn btn-sm btn-warning" data-toast="Reminder sent (demo)">Remind</button></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="page-section" id="guests">
+          <div class="card">
+            <div class="card-head">
+              <h3>Guest Directory</h3>
+              <button class="btn btn-sm btn-primary" data-toast="Guest profile created (demo)">Add Guest</button>
+            </div>
+            <div class="card-body">
+              <div class="guest-grid">
+                <div class="guest-card">
+                  <div class="guest-avatar">🧑</div>
+                  <div class="guest-meta">
+                    <h4>John Smith</h4>
+                    <p>Room 204 • Returning Guest</p>
+                    <p>john.smith@email.demo</p>
+                    <span class="status info">VIP Note: late arrival</span>
+                  </div>
+                </div>
+
+                <div class="guest-card">
+                  <div class="guest-avatar">👩</div>
+                  <div class="guest-meta">
+                    <h4>Emma Clark</h4>
+                    <p>Room 318 • Corporate Stay</p>
+                    <p>emma.clark@email.demo</p>
+                    <span class="status ok">Checked In</span>
+                  </div>
+                </div>
+
+                <div class="guest-card">
+                  <div class="guest-avatar">🧔</div>
+                  <div class="guest-meta">
+                    <h4>David Kim</h4>
+                    <p>Arriving Tomorrow</p>
+                    <p>david.kim@email.demo</p>
+                    <span class="status wait">Pending Arrival</span>
+                  </div>
+                </div>
+
+                <div class="guest-card">
+                  <div class="guest-avatar">👩‍💼</div>
+                  <div class="guest-meta">
+                    <h4>Amelia Reed</h4>
+                    <p>Room 118 • Short Stay</p>
+                    <p>amelia.reed@email.demo</p>
+                    <span class="status ok">Confirmed</span>
+                  </div>
+                </div>
+
+                <div class="guest-card">
+                  <div class="guest-avatar">🧑‍🦱</div>
+                  <div class="guest-meta">
+                    <h4>Nathan Bell</h4>
+                    <p>Prefers quiet floor</p>
+                    <p>nathan.bell@email.demo</p>
+                    <span class="status info">Profile Saved</span>
+                  </div>
+                </div>
+
+                <div class="guest-card">
+                  <div class="guest-avatar">👩‍👧</div>
+                  <div class="guest-meta">
+                    <h4>Lisa Wong</h4>
+                    <p>Family booking • 2 adults, 1 child</p>
+                    <p>lisa.wong@email.demo</p>
+                    <span class="status wait">Upcoming</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="page-section" id="checkin">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-head">
+                <h3>Arrivals Today</h3>
+              </div>
+              <div class="card-body">
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Guest</th>
+                        <th>Room</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>John Smith</td>
+                        <td>204</td>
+                        <td>1:30 PM</td>
+                        <td><span class="status ok">Ready</span></td>
+                        <td><button class="btn btn-sm btn-primary" data-toast="Guest checked in (demo)">Check In</button></td>
+                      </tr>
+                      <tr>
+                        <td>Amelia Reed</td>
+                        <td>118</td>
+                        <td>6:00 PM</td>
+                        <td><span class="status info">Room assigned</span></td>
+                        <td><button class="btn btn-sm btn-primary" data-toast="Guest checked in (demo)">Check In</button></td>
+                      </tr>
+                      <tr>
+                        <td>VIP Arrival - Oliver Grant</td>
+                        <td>411</td>
+                        <td>2:00 PM</td>
+                        <td><span class="status wait">Amenities setup</span></td>
+                        <td><button class="btn btn-sm btn-warning" data-toast="VIP preparation confirmed (demo)">Prepare</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head">
+                <h3>Departures Today</h3>
+              </div>
+              <div class="card-body">
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Guest</th>
+                        <th>Room</th>
+                        <th>Balance</th>
+                        <th>Status</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Grace Howard</td>
+                        <td>210</td>
+                        <td>&#36;0</td>
+                        <td><span class="status ok">Paid</span></td>
+                        <td><button class="btn btn-sm btn-light" data-toast="Checkout completed (demo)">Check Out</button></td>
+                      </tr>
+                      <tr>
+                        <td>Marco Silva</td>
+                        <td>323</td>
+                        <td>&#36;65</td>
+                        <td><span class="status wait">Pending payment</span></td>
+                        <td><button class="btn btn-sm btn-primary" data-toast="Invoice opened (demo)">Invoice</button></td>
+                      </tr>
+                      <tr>
+                        <td>Sophia Hart</td>
+                        <td>105</td>
+                        <td>&#36;0</td>
+                        <td><span class="status ok">Paid</span></td>
+                        <td><button class="btn btn-sm btn-light" data-toast="Checkout completed (demo)">Check Out</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="page-section" id="housekeeping">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-head">
+                <h3>Priority Tasks</h3>
+              </div>
+              <div class="card-body">
+                <div class="tasks">
+                  <div class="task">
+                    <div class="task-badge">🧹</div>
+                    <div>
+                      <h4>Room 118 - Express cleaning</h4>
+                      <p>Arrival expected at 6:00 PM. Fresh towels, minibar check, and kid amenity setup.</p>
+                    </div>
+                  </div>
+                  <div class="task">
+                    <div class="task-badge">🛠️</div>
+                    <div>
+                      <h4>Room 502 - AC service</h4>
+                      <p>Maintenance assigned. Keep room out of order until engineering clears the ticket.</p>
+                    </div>
+                  </div>
+                  <div class="task">
+                    <div class="task-badge">✨</div>
+                    <div>
+                      <h4>Room 411 - VIP preparation</h4>
+                      <p>Fruit basket, welcome note, extra pillows, and premium bath setup required.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head">
+                <h3>Cleaning Board</h3>
+              </div>
+              <div class="card-body">
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Room</th>
+                        <th>Assigned To</th>
+                        <th>Type</th>
+                        <th>Progress</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>118</td>
+                        <td>Maria</td>
+                        <td>Turnover</td>
+                        <td><span class="status wait">In Progress</span></td>
+                      </tr>
+                      <tr>
+                        <td>305</td>
+                        <td>Kevin</td>
+                        <td>Deep Clean</td>
+                        <td><span class="status info">Started</span></td>
+                      </tr>
+                      <tr>
+                        <td>420</td>
+                        <td>Riya</td>
+                        <td>Refresh</td>
+                        <td><span class="status ok">Completed</span></td>
+                      </tr>
+                      <tr>
+                        <td>411</td>
+                        <td>Maria</td>
+                        <td>VIP Setup</td>
+                        <td><span class="status wait">Waiting QA</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="inline-actions">
+                  <button class="btn btn-primary" data-toast="Housekeeping report sent (demo)">Send Update</button>
+                  <button class="btn btn-light" data-toast="Task reassigned (demo)">Reassign Task</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="page-section" id="restaurant">
+          <div class="card">
+            <div class="card-head">
+              <h3>Menu Highlights</h3>
+              <button class="btn btn-sm btn-primary" data-toast="New menu item panel opened (demo)">Add Menu Item</button>
+            </div>
+            <div class="card-body">
+              <div class="menu-grid">
+                <div class="menu-card">
+                  <div class="menu-visual">🍝</div>
+                  <div class="menu-body">
+                    <h4>Creamy Alfredo Pasta</h4>
+                    <p>Rich parmesan sauce with herbs and garlic bread.</p>
+                    <div class="menu-footer">
+                      <div class="menu-price">&#36;16</div>
+                      <button class="btn btn-sm btn-light" data-toast="Item added to order (demo)">Add</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="menu-card">
+                  <div class="menu-visual">🥗</div>
+                  <div class="menu-body">
+                    <h4>Garden Fresh Salad</h4>
+                    <p>Seasonal greens, feta, olives, and citrus dressing.</p>
+                    <div class="menu-footer">
+                      <div class="menu-price">&#36;11</div>
+                      <button class="btn btn-sm btn-light" data-toast="Item added to order (demo)">Add</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="menu-card">
+                  <div class="menu-visual">🍔</div>
+                  <div class="menu-body">
+                    <h4>RoyalStay Burger</h4>
+                    <p>Beef patty, cheddar, caramelized onions, and fries.</p>
+                    <div class="menu-footer">
+                      <div class="menu-price">&#36;18</div>
+                      <button class="btn btn-sm btn-light" data-toast="Item added to order (demo)">Add</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="menu-card">
+                  <div class="menu-visual">🍲</div>
+                  <div class="menu-body">
+                    <h4>Chef Soup Special</h4>
+                    <p>Daily rotating soup with toasted artisan bread.</p>
+                    <div class="menu-footer">
+                      <div class="menu-price">&#36;9</div>
+                      <button class="btn btn-sm btn-light" data-toast="Item added to order (demo)">Add</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="menu-card">
+                  <div class="menu-visual">🍰</div>
+                  <div class="menu-body">
+                    <h4>Signature Cheesecake</h4>
+                    <p>Silky baked cheesecake with berry drizzle.</p>
+                    <div class="menu-footer">
+                      <div class="menu-price">&#36;8</div>
+                      <button class="btn btn-sm btn-light" data-toast="Item added to order (demo)">Add</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="menu-card">
+                  <div class="menu-visual">☕</div>
+                  <div class="menu-body">
+                    <h4>Barista Latte</h4>
+                    <p>Fresh espresso with silky milk foam.</p>
+                    <div class="menu-footer">
+                      <div class="menu-price">&#36;5</div>
+                      <button class="btn btn-sm btn-light" data-toast="Item added to order (demo)">Add</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <h3>Open Orders</h3>
+            </div>
+            <div class="card-body">
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Order #</th>
+                      <th>Location</th>
+                      <th>Items</th>
+                      <th>Total</th>
+                      <th>Status</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>FO-114</td>
+                      <td>Room 318</td>
+                      <td>2 items</td>
+                      <td>&#36;24</td>
+                      <td><span class="status wait">Preparing</span></td>
+                      <td><button class="btn btn-sm btn-primary" data-toast="Order marked delivered (demo)">Deliver</button></td>
+                    </tr>
+                    <tr>
+                      <td>FO-115</td>
+                      <td>Restaurant Table 6</td>
+                      <td>3 items</td>
+                      <td>&#36;42</td>
+                      <td><span class="status info">Plated</span></td>
+                      <td><button class="btn btn-sm btn-light" data-toast="Order closed (demo)">Close</button></td>
+                    </tr>
+                    <tr>
+                      <td>FO-116</td>
+                      <td>Pool Bar</td>
+                      <td>4 items</td>
+                      <td>&#36;31</td>
+                      <td><span class="status ok">Served</span></td>
+                      <td><button class="btn btn-sm btn-light" data-toast="Receipt printed (demo)">Receipt</button></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="page-section" id="inventory">
+          <div class="card">
+            <div class="card-head">
+              <h3>Current Stock</h3>
+              <button class="btn btn-sm btn-primary" data-toast="Purchase request generated (demo)">Generate Purchase Order</button>
+            </div>
+            <div class="card-body">
+              <div class="supply-list">
+                <div class="supply">
+                  <div class="supply-left">
+                    <div class="supply-icon">🧴</div>
+                    <div>
+                      <h4>Shampoo Bottles</h4>
+                      <p>Guest amenities • Reorder level 80</p>
+                    </div>
+                  </div>
+                  <div class="supply-right">
+                    <div class="big">64</div>
+                    <span class="status wait">Low Stock</span>
+                  </div>
+                </div>
+
+                <div class="supply">
+                  <div class="supply-left">
+                    <div class="supply-icon">🧻</div>
+                    <div>
+                      <h4>Tissue Rolls</h4>
+                      <p>Housekeeping supply • Reorder level 120</p>
+                    </div>
+                  </div>
+                  <div class="supply-right">
+                    <div class="big">210</div>
+                    <span class="status ok">Healthy</span>
+                  </div>
+                </div>
+
+                <div class="supply">
+                  <div class="supply-left">
+                    <div class="supply-icon">☕</div>
+                    <div>
+                      <h4>Coffee Sachets</h4>
+                      <p>Room and restaurant use • Reorder level 200</p>
+                    </div>
+                  </div>
+                  <div class="supply-right">
+                    <div class="big">155</div>
+                    <span class="status wait">Watch</span>
+                  </div>
+                </div>
+
+                <div class="supply">
+                  <div class="supply-left">
+                    <div class="supply-icon">🧼</div>
+                    <div>
+                      <h4>Hand Soap</h4>
+                      <p>Guest amenities • Reorder level 70</p>
+                    </div>
+                  </div>
+                  <div class="supply-right">
+                    <div class="big">132</div>
+                    <span class="status ok">Healthy</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <h3>Stock Movement</h3>
+            </div>
+            <div class="card-body">
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Item</th>
+                      <th>Type</th>
+                      <th>Quantity</th>
+                      <th>Handled By</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>09 Mar 2026</td>
+                      <td>Shampoo Bottles</td>
+                      <td>Issued</td>
+                      <td>24</td>
+                      <td>Housekeeping</td>
+                    </tr>
+                    <tr>
+                      <td>09 Mar 2026</td>
+                      <td>Coffee Sachets</td>
+                      <td>Issued</td>
+                      <td>40</td>
+                      <td>Restaurant</td>
+                    </tr>
+                    <tr>
+                      <td>08 Mar 2026</td>
+                      <td>Tissue Rolls</td>
+                      <td>Received</td>
+                      <td>120</td>
+                      <td>Store Manager</td>
+                    </tr>
+                    <tr>
+                      <td>08 Mar 2026</td>
+                      <td>Hand Soap</td>
+                      <td>Received</td>
+                      <td>60</td>
+                      <td>Store Manager</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="page-section" id="billing">
+          <div class="stats">
+            <div class="card stat-card">
+              <div class="stat-icon">💰</div>
+              <div class="stat-copy">
+                <small>Total Collected</small>
+                <strong>&#36;38,920</strong>
+                <span>Month to date</span>
+              </div>
+            </div>
+            <div class="card stat-card">
+              <div class="stat-icon">🧾</div>
+              <div class="stat-copy">
+                <small>Open Invoices</small>
+                <strong>11</strong>
+                <span>3 due today</span>
+              </div>
+            </div>
+            <div class="card stat-card">
+              <div class="stat-icon">🏦</div>
+              <div class="stat-copy">
+                <small>Card Payments</small>
+                <strong>&#36;31,100</strong>
+                <span>79.9% of payments</span>
+              </div>
+            </div>
+            <div class="card stat-card">
+              <div class="stat-icon">💵</div>
+              <div class="stat-copy">
+                <small>Cash Payments</small>
+                <strong>&#36;7,820</strong>
+                <span>Front desk collected</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <h3>Invoices</h3>
+              <button class="btn btn-sm btn-primary" data-toast="Invoice created (demo)">Create Invoice</button>
+            </div>
+            <div class="card-body">
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Invoice</th>
+                      <th>Guest</th>
+                      <th>Description</th>
+                      <th>Total</th>
+                      <th>Method</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>INV-2301</td>
+                      <td>Emma Clark</td>
+                      <td>Room + dinner</td>
+                      <td>&#36;296</td>
+                      <td>Visa</td>
+                      <td><span class="status ok">Paid</span></td>
+                    </tr>
+                    <tr>
+                      <td>INV-2302</td>
+                      <td>Marco Silva</td>
+                      <td>Room + minibar</td>
+                      <td>&#36;211</td>
+                      <td>Pending</td>
+                      <td><span class="status wait">Due</span></td>
+                    </tr>
+                    <tr>
+                      <td>INV-2303</td>
+                      <td>John Smith</td>
+                      <td>Advance deposit</td>
+                      <td>&#36;145</td>
+                      <td>Mastercard</td>
+                      <td><span class="status ok">Paid</span></td>
+                    </tr>
+                    <tr>
+                      <td>INV-2304</td>
+                      <td>Oliver Grant</td>
+                      <td>VIP suite hold</td>
+                      <td>&#36;225</td>
+                      <td>Amex</td>
+                      <td><span class="status info">Authorized</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="page-section" id="staff">
+          <div class="card">
+            <div class="card-head">
+              <h3>Team Directory</h3>
+              <button class="btn btn-sm btn-primary" data-toast="New staff profile created (demo)">Add Staff</button>
+            </div>
+            <div class="card-body">
+              <div class="staff-grid">
+                <div class="staff-card">
+                  <div class="staff-avatar">👩‍💼</div>
+                  <h4>Sarah Johnson</h4>
+                  <p>Hotel Manager</p>
+                  <span class="status ok">On Duty</span>
+                </div>
+                <div class="staff-card">
+                  <div class="staff-avatar">🧑‍💻</div>
+                  <h4>Kevin Lee</h4>
+                  <p>Front Desk Executive</p>
+                  <span class="status ok">On Duty</span>
+                </div>
+                <div class="staff-card">
+                  <div class="staff-avatar">🧹</div>
+                  <h4>Maria Costa</h4>
+                  <p>Housekeeping Lead</p>
+                  <span class="status info">Floor 1-3</span>
+                </div>
+                <div class="staff-card">
+                  <div class="staff-avatar">👨‍🍳</div>
+                  <h4>Daniel Brooks</h4>
+                  <p>Restaurant Chef</p>
+                  <span class="status ok">Kitchen Open</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <h3>Weekly Schedule</h3>
+            </div>
+            <div class="card-body">
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Staff</th>
+                      <th>Department</th>
+                      <th>Mon</th>
+                      <th>Tue</th>
+                      <th>Wed</th>
+                      <th>Thu</th>
+                      <th>Fri</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Sarah Johnson</td>
+                      <td>Management</td>
+                      <td>9-5</td>
+                      <td>9-5</td>
+                      <td>9-5</td>
+                      <td>9-5</td>
+                      <td>9-4</td>
+                    </tr>
+                    <tr>
+                      <td>Kevin Lee</td>
+                      <td>Front Desk</td>
+                      <td>7-3</td>
+                      <td>7-3</td>
+                      <td>7-3</td>
+                      <td>Off</td>
+                      <td>7-3</td>
+                    </tr>
+                    <tr>
+                      <td>Maria Costa</td>
+                      <td>Housekeeping</td>
+                      <td>8-4</td>
+                      <td>8-4</td>
+                      <td>8-4</td>
+                      <td>8-4</td>
+                      <td>8-2</td>
+                    </tr>
+                    <tr>
+                      <td>Daniel Brooks</td>
+                      <td>Restaurant</td>
+                      <td>12-8</td>
+                      <td>12-8</td>
+                      <td>12-8</td>
+                      <td>12-8</td>
+                      <td>12-10</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="page-section" id="reports">
+          <div class="grid-4">
+            <div class="kpi">
+              <small>Occupancy Rate</small>
+              <strong>72%</strong>
+              <div class="progress"><span style="width:72%"></span></div>
+            </div>
+            <div class="kpi">
+              <small>ADR</small>
+              <strong>&#36;142</strong>
+              <div class="progress"><span style="width:63%"></span></div>
+            </div>
+            <div class="kpi">
+              <small>RevPAR</small>
+              <strong>&#36;102</strong>
+              <div class="progress"><span style="width:58%"></span></div>
+            </div>
+            <div class="kpi">
+              <small>Guest Score</small>
+              <strong>4.6 / 5</strong>
+              <div class="progress"><span style="width:92%"></span></div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-head">
+                <h3>Monthly Performance</h3>
+              </div>
+              <div class="card-body">
+                <div class="bars">
+                  <div class="bar-wrap"><div class="bar" style="height:42%"></div><div class="bar-label">Jan</div></div>
+                  <div class="bar-wrap"><div class="bar" style="height:54%"></div><div class="bar-label">Feb</div></div>
+                  <div class="bar-wrap"><div class="bar" style="height:61%"></div><div class="bar-label">Mar</div></div>
+                  <div class="bar-wrap"><div class="bar" style="height:67%"></div><div class="bar-label">Apr</div></div>
+                  <div class="bar-wrap"><div class="bar" style="height:71%"></div><div class="bar-label">May</div></div>
+                  <div class="bar-wrap"><div class="bar" style="height:78%"></div><div class="bar-label">Jun</div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head">
+                <h3>Quick Reports</h3>
+              </div>
+              <div class="card-body">
+                <div class="tasks">
+                  <div class="task">
+                    <div class="task-badge">📄</div>
+                    <div>
+                      <h4>Daily Revenue Report</h4>
+                      <p>Track room, food, and service revenue for the current day.</p>
+                    </div>
+                    <button class="btn btn-sm btn-light" data-toast="Daily revenue report exported (demo)">Export</button>
+                  </div>
+                  <div class="task">
+                    <div class="task-badge">📄</div>
+                    <div>
+                      <h4>Occupancy Report</h4>
+                      <p>View room utilization by date, type, and floor.</p>
+                    </div>
+                    <button class="btn btn-sm btn-light" data-toast="Occupancy report exported (demo)">Export</button>
+                  </div>
+                  <div class="task">
+                    <div class="task-badge">📄</div>
+                    <div>
+                      <h4>Inventory Consumption</h4>
+                      <p>Analyze how quickly guest and restaurant supplies are moving.</p>
+                    </div>
+                    <button class="btn btn-sm btn-light" data-toast="Inventory report exported (demo)">Export</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="page-section" id="settings">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-head">
+                <h3>Hotel Information</h3>
+              </div>
+              <div class="card-body">
+                <form class="demo-form" data-success="Settings saved successfully (demo)">
+                  <div class="form-grid">
+                    <div class="field">
+                      <label>Hotel Name</label>
+                      <input type="text" value="RoyalStay Downtown Hotel" />
+                    </div>
+                    <div class="field">
+                      <label>Contact Number</label>
+                      <input type="text" value="+1 555 0900 111" />
+                    </div>
+                    <div class="field">
+                      <label>Email</label>
+                      <input type="email" value="info@royalstay.demo" />
+                    </div>
+                    <div class="field">
+                      <label>Currency</label>
+                      <select>
+                        <option>USD</option>
+                        <option>EUR</option>
+                        <option>GBP</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label>Address</label>
+                    <textarea rows="4">45 Harbor Avenue, Downtown District, New City</textarea>
+                  </div>
+                  <button class="btn btn-primary" type="submit">Save Changes</button>
+                </form>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head">
+                <h3>Preferences</h3>
+              </div>
+              <div class="card-body">
+                <div class="toggle-row">
+                  <div class="toggle-copy">
+                    <h4>Email Notifications</h4>
+                    <p>Receive new booking and payment alerts by email.</p>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" checked />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+
+                <div class="toggle-row">
+                  <div class="toggle-copy">
+                    <h4>Auto Assign Rooms</h4>
+                    <p>Automatically assign matching rooms during booking.</p>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" checked />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+
+                <div class="toggle-row">
+                  <div class="toggle-copy">
+                    <h4>Guest Reminder SMS</h4>
+                    <p>Send arrival reminders and payment follow-ups.</p>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+
+                <div class="toggle-row">
+                  <div class="toggle-copy">
+                    <h4>Night Audit Prompt</h4>
+                    <p>Show daily close checklist before ending the shift.</p>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" checked />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+
+                <div class="inline-actions">
+                  <button class="btn btn-primary" data-toast="Preferences saved (demo)">Save Preferences</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <h3>Account Details</h3>
+            </div>
+            <div class="card-body">
+              <div class="table-wrap">
+                <table style="min-width:520px">
+                  <thead>
+                    <tr>
+                      <th>Setting</th>
+                      <th>Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Current User</td>
+                      <td id="settingsUserName">Mammoth Newt</td>
+                    </tr>
+                    <tr>
+                      <td>Role</td>
+                      <td id="settingsUserRole">Administrator</td>
+                    </tr>
+                    <tr>
+                      <td>Session Mode</td>
+                      <td>Browser session only</td>
+                    </tr>
+                    <tr>
+                      <td>Security</td>
+                      <td>Password-based demo authentication</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div class="toast info" id="toast"></div>
+
+  <script>
+    (function () {
+      var accounts = [
+        {
+          name: "Mammoth Newt",
+          email: "mammoth@royalstay.demo",
+          password: "0226",
+          role: "Administrator"
+        }
+      ];
+
+      var currentUser = accounts[0];
+
+      var authScreen = document.getElementById("authScreen");
+      var appShell = document.getElementById("appShell");
+      var loginForm = document.getElementById("loginForm");
+      var signupForm = document.getElementById("signupForm");
+      var loginTabBtn = document.getElementById("loginTabBtn");
+      var signupTabBtn = document.getElementById("signupTabBtn");
+      var authTitle = document.getElementById("authTitle");
+      var authSub = document.getElementById("authSub");
+      var pageTitle = document.getElementById("pageTitle");
+      var topUserName = document.getElementById("topUserName");
+      var topUserRole = document.getElementById("topUserRole");
+      var heroUserName = document.getElementById("heroUserName");
+      var settingsUserName = document.getElementById("settingsUserName");
+      var settingsUserRole = document.getElementById("settingsUserRole");
+      var userAvatar = document.getElementById("userAvatar");
+      var sidebar = document.getElementById("sidebar");
+      var menuBtn = document.getElementById("menuBtn");
+      var overlay = document.getElementById("overlay");
+      var toast = document.getElementById("toast");
+
+      function setToast(message, type) {
+        toast.textContent = message;
+        toast.className = "toast " + (type || "info");
+        toast.classList.add("show");
+        clearTimeout(setToast._timer);
+        setToast._timer = setTimeout(function () {
+          toast.classList.remove("show");
+        }, 2400);
+      }
+
+      function initials(name) {
+        var parts = String(name || "").trim().split(/\s+/);
+        var first = parts[0] ? parts[0].charAt(0) : "U";
+        var second = parts[1] ? parts[1].charAt(0) : "";
+        return (first + second).toUpperCase();
+      }
+
+      function setUser(user) {
+        currentUser = user;
+        topUserName.textContent = user.name;
+        topUserRole.textContent = user.role;
+        heroUserName.textContent = user.name;
+        settingsUserName.textContent = user.name;
+        settingsUserRole.textContent = user.role;
+        userAvatar.textContent = initials(user.name);
+      }
+
+      function showAuth(tab) {
+        var isLogin = tab === "login";
+        loginTabBtn.classList.toggle("active", isLogin);
+        signupTabBtn.classList.toggle("active", !isLogin);
+        loginForm.classList.toggle("active", isLogin);
+        signupForm.classList.toggle("active", !isLogin);
+        authTitle.textContent = isLogin ? "Welcome back" : "Create your account";
+        authSub.textContent = isLogin
+          ? "Login to open your hotel dashboard and manage daily operations."
+          : "Sign up for a new session account and start managing your hotel right away.";
+      }
+
+      function openApp() {
+        authScreen.classList.add("hidden");
+        appShell.classList.add("active");
+        setUser(currentUser);
+        showPage("dashboard", "Dashboard");
+      }
+
+      function closeSidebar() {
+        sidebar.classList.remove("show");
+        overlay.classList.remove("show");
+      }
+
+      function showPage(id, title) {
+        var pages = document.querySelectorAll(".page-section");
+        var navs = document.querySelectorAll(".nav-btn[data-page]");
+        pages.forEach(function (page) {
+          page.classList.toggle("active", page.id === id);
+        });
+        navs.forEach(function (btn) {
+          btn.classList.toggle("active", btn.getAttribute("data-page") === id);
+        });
+        pageTitle.textContent = title || "Dashboard";
+        closeSidebar();
+      }
+
+      loginTabBtn.addEventListener("click", function () {
+        showAuth("login");
+      });
+
+      signupTabBtn.addEventListener("click", function () {
+        showAuth("signup");
+      });
+
+      document.getElementById("goLoginBtn").addEventListener("click", function () {
+        showAuth("login");
+      });
+
+      document.getElementById("fillDemoBtn").addEventListener("click", function () {
+        document.getElementById("loginIdentifier").value = "Mammoth Newt";
+        document.getElementById("loginPassword").value = "0226";
+        setToast("Demo credentials filled", "info");
+      });
+
+      loginForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var id = document.getElementById("loginIdentifier").value.trim().toLowerCase();
+        var pass = document.getElementById("loginPassword").value;
+        var found = accounts.find(function (acc) {
+          return (
+            (acc.name.toLowerCase() === id || acc.email.toLowerCase() === id) &&
+            acc.password === pass
+          );
+        });
+
+        if (!found) {
+          setToast("Login failed. Check your name/email and password.", "error");
+          return;
+        }
+
+        currentUser = found;
+        openApp();
+        setToast("Login successful. Welcome back, " + found.name + "!", "success");
+      });
+
+      signupForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var name = document.getElementById("signupName").value.trim();
+        var role = document.getElementById("signupRole").value;
+        var email = document.getElementById("signupEmail").value.trim().toLowerCase();
+        var password = document.getElementById("signupPassword").value;
+        var confirm = document.getElementById("signupConfirm").value;
+
+        if (name.length < 3) {
+          setToast("Please enter a valid full name.", "error");
+          return;
+        }
+
+        if (email.indexOf("@") === -1 || email.indexOf(".") === -1) {
+          setToast("Please enter a valid email address.", "error");
+          return;
+        }
+
+        if (password.length < 4) {
+          setToast("Password should be at least 4 characters.", "error");
+          return;
+        }
+
+        if (password !== confirm) {
+          setToast("Passwords do not match.", "error");
+          return;
+        }
+
+        var exists = accounts.some(function (acc) {
+          return acc.email.toLowerCase() === email;
+        });
+
+        if (exists) {
+          setToast("This email is already registered in the current session.", "error");
+          return;
+        }
+
+        var newUser = {
+          name: name,
+          email: email,
+          password: password,
+          role: role
+        };
+
+        accounts.push(newUser);
+        currentUser = newUser;
+        signupForm.reset();
+        openApp();
+        setToast("Account created successfully. Hello, " + name + "!", "success");
+      });
+
+      document.querySelectorAll(".nav-btn[data-page]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var id = btn.getAttribute("data-page");
+          var title = btn.getAttribute("data-title");
+          showPage(id, title);
+        });
+      });
+
+      document.getElementById("logoutBtn").addEventListener("click", function () {
+        appShell.classList.remove("active");
+        authScreen.classList.remove("hidden");
+        closeSidebar();
+        showAuth("login");
+        document.getElementById("loginPassword").value = "";
+        setToast("Logged out successfully.", "info");
+      });
+
+      menuBtn.addEventListener("click", function () {
+        sidebar.classList.add("show");
+        overlay.classList.add("show");
+      });
+
+      overlay.addEventListener("click", closeSidebar);
+
+      document.querySelectorAll("[data-toast]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          setToast(btn.getAttribute("data-toast"), "info");
+        });
+      });
+
+      document.querySelectorAll(".demo-form").forEach(function (form) {
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          var msg = form.getAttribute("data-success") || "Saved successfully (demo)";
+          setToast(msg, "success");
+        });
+      });
+
+      setUser(currentUser);
+      showAuth("login");
+    })();
+  </script>
+</body>
+</html>
